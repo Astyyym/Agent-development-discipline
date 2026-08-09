@@ -1,15 +1,18 @@
 # Beginner Agent Development Rules
 
-A reusable Hermes Agent skill for cautious software development and delivery.
+A reusable, framework-agnostic Hermes Agent skill for cautious software development and delivery.
 
-It covers:
+It helps an AI agent:
 
-- confirming requirements before coding;
-- maintaining one authoritative source location;
-- using temporary copies and Git worktrees safely;
-- verifying the authoritative copy before cleanup;
-- scanning for secrets, personal information, local paths, and real data before publication;
-- distinguishing repository pushes, releases, packages, and platform acceptance tests.
+- confirm material requirements before coding;
+- keep one authoritative source location;
+- work in small, independently verifiable stages;
+- use real feedback loops and vertical slices;
+- review requirements fit separately from engineering quality;
+- avoid speculative abstractions and unnecessary process overhead;
+- verify the authoritative copy before cleaning temporary worktrees;
+- scan for secrets, personal information, local paths, and real data before publication;
+- distinguish repository pushes, releases, packages, and platform acceptance tests.
 
 ## Installation
 
@@ -19,7 +22,11 @@ Copy `SKILL.md` into your Hermes skills directory, for example:
 ~/.hermes/skills/software-development/beginner-agent-development-rules/SKILL.md
 ```
 
-The skill is intentionally generic and contains no project-specific credentials, personal data, or machine-specific paths.
+The skill is intentionally generic. It contains no project-specific credentials, personal data, or machine-specific paths.
+
+## Design principles
+
+This skill is a compact workflow, not a mandatory issue tracker, interview ritual, commit policy, or framework. Adapt the planning files, testing seams, and delivery gates to the project while preserving the evidence and safety rules.
 
 ## License
 

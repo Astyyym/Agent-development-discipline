@@ -1,13 +1,13 @@
 ---
 name: beginner-agent-development-rules
-description: Use when an AI agent starts, changes, migrates, packages, open-sources, or delivers a software project. Guides requirement confirmation, isolated development, verified delivery, sensitive-data checks, and cleanup of temporary copies or worktrees.
-version: 1.0.0
+description: Use when an AI agent starts, changes, migrates, packages, open-sources, or delivers a software project. Guides requirement confirmation, staged verification, maintainable design, safe delivery, and cleanup.
+version: 1.2.0
 author: Hermes Agent
 license: MIT
 platforms: [linux, macos, windows]
 metadata:
   hermes:
-    tags: [requirements, planning, development, worktree, delivery, security]
+    tags: [requirements, planning, development, testing, architecture, delivery, security]
     related_skills: [writing-plans, vibe-coding-spec]
 ---
 
@@ -15,172 +15,151 @@ metadata:
 
 ## Overview
 
-This skill defines a cautious development workflow for AI coding agents. It is intended for projects where requirements, file locations, isolated development, verification, delivery, and cleanup must remain explicit.
+A cautious, composable workflow for AI coding agents. It keeps requirements, scope, source locations, verification, delivery, and cleanup explicit without forcing a particular issue tracker, interview ritual, commit policy, or framework.
 
-The central rule is: **understand first, modify deliberately, verify the authoritative copy, and clean up temporary development environments only after verification succeeds.**
+> Understand first → make a small change → verify the real behavior → record the result → deliver honestly.
 
 ## When to Use
 
-Use this skill when an agent is asked to:
-
-- start a new software project or feature;
-- change, migrate, package, or deliver an existing project;
-- create a branch, clone, temporary copy, or Git worktree;
-- open-source a project or publish project files;
-- review whether a project is ready for delivery.
-
-Do not treat an unconfirmed assumption as a requirement. If a decision materially changes architecture, platform support, data handling, user experience, or delivery scope, pause and confirm it first.
+Use when an agent is asked to start, change, migrate, package, open-source, review, or deliver a software project. Do not treat an unconfirmed assumption as a requirement. If a decision materially changes architecture, platform support, data handling, user experience, or delivery scope, pause and confirm it.
 
 ## 1. Requirements Before Code
 
-For a new project or requirement change:
-
 1. Restate the intended result in plain language.
-2. Identify unclear points, missing use cases, technical risks, compatibility concerns, security risks, and scope boundaries.
-3. Ask only the questions that materially affect implementation. When a reasonable default exists, recommend it and explain why.
-4. Confirm the architecture, supported platform, authoritative source location, data storage, delivery format, and development boundaries.
-5. Record the confirmed requirements before writing product code. The requirements document should include:
-   - execution principles;
-   - prohibited actions;
-   - implementation order;
-   - completion checklist;
-   - boundaries for AI-agent actions.
-6. Write a short implementation plan containing exact files, tasks, and verification commands.
-7. Follow the confirmed requirements and plan without silently expanding the scope.
+2. Identify unclear points, missing use cases, technical/security/compatibility risks, and scope boundaries.
+3. Ask only questions that materially affect implementation; recommend a reasonable default when appropriate.
+4. Confirm architecture, supported platform, authoritative source location, data storage, delivery format, and development boundaries.
+5. Record confirmed requirements before writing product code. Include agent boundaries, prohibited actions, implementation order, and completion criteria.
+6. Write a short plan with exact files, tasks, and verification methods.
+7. Follow the confirmed requirements without silently expanding scope.
 8. Verify each meaningful change and then run an overall workflow check.
 
-For new requirements, repeat this sequence:
+For a new requirement, repeat:
 
-**understand and identify questions → confirm → update requirements → update plan → implement → verify**
+**understand → confirm → update requirements → update plan → implement → verify**
 
-## 2. Authoritative Source and Development Locations
+Previously confirmed decisions and test boundaries should be reused, not re-asked. New or disputed boundaries require confirmation.
 
-Every project must have one clearly identified **authoritative source location**. Do not maintain two independent copies as long-term sources of truth.
+## 2. One Authoritative Source
 
-Choose the location according to the final runtime and toolchain:
+Every project must have one clearly identified authoritative source location. Do not maintain two independent long-term sources.
 
-- A small local application may use its target platform directory as the authoritative source.
-- A project that needs a Linux toolchain may use a Linux/WSL repository as the primary source and use another platform only for packaging or smoke testing.
-- A service or platform-specific plugin should remain in the environment where it is developed and run.
-- If development starts in a temporary environment, migrate or synchronize the accepted changes to the authoritative source before delivery.
+Choose the location according to the final runtime and toolchain. Clearly label build copies, test directories, release directories, temporary workspaces, and worktrees so they cannot be mistaken for the authoritative source.
 
-Clearly label build copies, test directories, release directories, and temporary workspaces. They must not be mistaken for the authoritative source.
+Temporary copies and worktrees are allowed during development. Before removing one:
 
-### Temporary Copies and Git Worktrees
+1. Identify accepted changes, documentation, tests, and useful artifacts.
+2. Synchronize accepted changes to the authoritative source.
+3. Verify the authoritative source is complete and runnable.
+4. Run required tests and smoke checks from the authoritative source.
+5. Remove only task-created temporary environments after successful verification.
+6. Check for unsynchronized changes before deletion.
 
-Temporary copies, branches, Git worktrees, and isolated directories are allowed during development. They are process environments, not permanent additional sources.
+Never delete pre-existing backups, branches, worktrees, history, or the only source copy without authorization.
 
-At the end of development:
+## 3. Short Plans and Project Context
 
-1. Identify all accepted changes, documentation, tests, and useful artifacts.
-2. Synchronize the accepted changes to the predetermined authoritative source.
-3. Verify that the authoritative source is complete and runnable.
-4. Run the required tests and smoke checks from the authoritative source.
-5. Only after successful verification, remove the temporary copies and worktrees created for this task.
-6. Before deletion, check for unsynchronized changes or valuable files.
+Store a concise plan in the project’s established planning location. Each item states the goal, exact files, steps, verification, and relationship to confirmed requirements.
 
-Delete only temporary environments created for the current task. Do not delete pre-existing user backups, directories, branches, or worktrees without explicit authorization. Formal delivery artifacts such as release packages, installers, `dist` directories, and test reports may be retained according to the project’s delivery requirements.
+For long, multi-stage, or cross-session work, keep project context files with distinct responsibilities:
 
-## 3. Short Implementation Plans
+- `AGENTS.md`: long-term project rules, run/test commands, boundaries, and delivery notes;
+- `task_plan.md`: current stages, blockers, decisions, and acceptance checks;
+- `findings.md`: environment conclusions, pitfalls, and failed approaches;
+- `progress.md`: short session-level record of changes, verification, and next step.
 
-Store a concise plan in the project’s established planning location, such as `docs/plans/`, `plans/`, or `development-plans/`. Each item should state:
+Do not create duplicate sources of truth. Product scope belongs in the requirements document; implementation details belong in the short plan; project rules belong in `AGENTS.md`.
 
-- goal;
-- exact files to create or modify;
-- implementation steps;
-- verification method;
-- relationship to the confirmed requirements.
+## 4. Stages, Feedback Loops, and Vertical Slices
 
-If a discovery changes the requirements, architecture, or user experience, stop and report it. Update the requirements and plan before continuing.
+Split complex work into independently verifiable stages. Each stage defines its goal, entry condition, change scope, verification, pass criteria, temporary artifacts, and failure handling.
 
-## 4. Minimum Verification
+Use this order:
 
-Verification must match the actual product and target platform. Do not claim a platform or workflow is supported based only on static inspection.
+> confirm entry → execute current stage → verify immediately → record evidence → continue only after passing
 
-At minimum, perform the checks relevant to the project:
+A stage is **passed**, **failed**, **blocked**, or **deferred**. Do not enter the next stage, expand scope, or replace stage verification with a later overall test while the gate is not passed.
 
-- syntax or type checks;
-- dependency and resource-loading checks;
-- unit or integration tests;
-- one real user-flow smoke test;
-- packaging and startup checks when a packaged application is delivered;
-- file output checks, including headers, paths, names, dimensions, or content where applicable;
-- `git diff --check` for Git repositories.
+Verification should provide a clear, repeatable, red-capable signal for the stage’s real goal. Prefer:
 
-For visual outputs such as diagrams, tables, maps, or grids, verify that labels, numbers, and other required annotations remain readable in both preview and exported output. Do not silently omit required information to make a preview smaller.
+1. real user behavior or end-to-end flow;
+2. behavior tests at an agreed public seam;
+3. API/CLI requests with deterministic expected output;
+4. browser flow, DOM state, console, and network assertions;
+5. type, syntax, and static checks.
 
-For desktop applications, do not substitute a server-side test for native application acceptance. When applicable, verify the actual packaged executable, isolated test data, startup/restart behavior, native file dialogs, cancellation behavior, Unicode paths, and the final output in an appropriate viewer.
+Low-level checks do not replace high-level acceptance: syntax passing does not prove a page works, a server starting does not prove business behavior, and a file being generated does not prove its contents or layout are correct.
 
-Report separately what was covered by automation, what was observed in the packaged application, and what still requires manual acceptance.
+For complex features, use vertical slices: one smallest real behavior chain at a time, **verification → minimal implementation → re-verification**. Do not first build large layers of frontend/backend/database work or batches of tests that are not tied to observed behavior.
 
-## 5. Open-Source Security Gate
+## 5. Delivery Review: Two Separate Axes
 
-Before making a repository public, scan tracked files and planned commits for:
+Before delivery, review both axes separately.
 
-- API keys, tokens, cookies, passwords, private keys, certificates, and `.env` files;
-- real names, phone numbers, addresses, customer, health, financial, or business data;
+**Requirements fit**
+
+- Does the implementation satisfy confirmed requirements and stage acceptance criteria?
+- Are there omissions, misunderstandings, or decisions that were contradicted?
+- Is there unauthorized scope, premature future work, or unclassified new discovery?
+
+**Engineering quality**
+
+- Does it follow project rules and established conventions?
+- Are there duplicate logic, debug remnants, temporary artifacts, secrets, or private data?
+- Are module boundaries clear, without unnecessary pass-through layers or speculative abstractions?
+- Do tests exercise public behavior rather than internal implementation details?
+
+One axis passing does not replace the other. Do not automatically commit, push, package, or release merely because code appears complete; follow the requested delivery boundary.
+
+## 6. Design with Restraint
+
+Prefer deep modules: a small, stable interface that hides meaningful implementation complexity from callers and tests.
+
+Before extracting or abstracting, ask:
+
+- Can the interface be smaller and easier to use?
+- Does deleting this module remove complexity, or merely spread it to callers?
+- Is there a real variation point or a second adapter today?
+- Does the abstraction serve a confirmed requirement rather than a hypothetical future?
+
+Without a real variation point, do not add speculative plugin points, generic parameters, adapters, or middlemen. Record worthwhile architecture improvements as follow-up work instead of expanding the current stage.
+
+## 7. Verification and Security Gate
+
+Verification must match the product and target platform. Where relevant, run syntax/type checks, dependency/resource checks, tests, a real user-flow smoke test, packaging/startup checks, output-content checks, and `git diff --check`.
+
+For visual outputs such as diagrams, tables, maps, or grids, confirm required labels and annotations remain readable in both preview and exported output. For desktop applications, verify the actual packaged executable and native flows when they are part of the deliverable; do not substitute a server-side test.
+
+Before publication, scan tracked files and planned commits for:
+
+- credentials, tokens, cookies, private keys, certificates, and `.env` files;
+- personal, customer, health, financial, or business data;
 - local absolute paths, usernames, logs, databases, backups, and machine-specific configuration;
-- private information in screenshots, demonstrations, README files, prompts, comments, and examples;
-- virtual environments, caches, dependency directories, and build artifacts that should be ignored.
+- private information in screenshots, README files, prompts, comments, and examples;
+- caches, virtual environments, dependencies, and build artifacts that should be ignored.
 
-Use fictional demonstration data and portable placeholders such as `<username>` or `/path/to/project`. Keep real configuration local and ignored; provide only safe examples such as `.env.example` when needed.
-
-If a secret has entered Git history, deleting the current file is not enough. Rotate or revoke the secret and clean the affected history before publication.
-
-## 6. Publishing a Clean Public Repository
-
-When the original project contains private history or local-only data:
-
-1. Keep the original project private until the public copy is verified.
-2. Export only the intended tracked source, not the entire working directory.
-3. Create the public copy in a separate directory without private Git history unless history preservation was explicitly required.
-4. Sanitize source files, documentation, configuration examples, scripts, metadata, logs, and screenshots.
-5. Run secret, path, data-file, syntax, and repository checks.
-6. Create the public repository and push only after the checks pass.
-7. Verify the repository visibility, default branch, commit history, and key files through the hosting service.
-8. Read back the public README and important files through an unauthenticated URL when possible.
-9. Keep the original private repository until the user explicitly authorizes its deletion or migration.
-
-Do not describe `git push` as a release. Distinguish clearly between a pushed repository, a published release, a packaged artifact, and a completed platform acceptance test.
-
-## 7. Review and Cleanup
-
-When reviewing a completed project, classify findings as:
-
-- must fix;
-- recommended improvement;
-- currently acceptable;
-- requires user confirmation.
-
-Separate automated evidence from platform-specific manual evidence. Do not modify unrelated issues merely because they exist, and do not delete historical files or a unique source copy just to make the directory look clean.
-
-After delivery verification:
-
-- confirm the authoritative source path;
-- confirm the final Git status and relevant remote state;
-- confirm accepted changes were not left only in a temporary workspace;
-- remove only the temporary copies and worktrees created for the task;
-- retain explicitly required release artifacts and reports.
+Use fictional data and portable placeholders. If a secret entered Git history, deleting the current file is not enough: rotate/revoke it and clean the affected history before publication.
 
 ## Prohibited Actions
 
 - Coding before material requirements are confirmed.
 - Treating guesses as confirmed requirements.
-- Continuing with an obsolete plan after the requirements change.
-- Deleting the only source copy or useful history before a verified replacement exists.
+- Continuing with an obsolete plan after requirements change.
+- Deleting the only source, useful history, or pre-existing backup without authorization.
 - Publishing before scanning for secrets, personal information, local paths, and real data.
-- Claiming success without running the relevant verification.
-- Deleting pre-existing backups or worktrees without authorization.
-- Leaving task-created temporary copies indefinitely after successful delivery.
+- Claiming success without running relevant verification.
+- Calling a push a release or a static check a platform acceptance test.
+- Forcing an external workflow’s issue, interview, commit, or plugin conventions onto a project where they do not fit.
 
 ## Completion Checklist
 
 - [ ] Requirements, risks, scope, platform, and delivery format are confirmed.
-- [ ] An authoritative source location is identified.
+- [ ] One authoritative source location is identified.
 - [ ] A short implementation plan exists and was followed.
+- [ ] Stages have clear gates and minimal evidence.
 - [ ] Relevant tests and real workflow checks passed.
+- [ ] Requirements fit and engineering quality were reviewed separately.
 - [ ] The authoritative source was verified after synchronization.
 - [ ] Public files were scanned for secrets, personal data, local paths, and real data.
 - [ ] Repository, package, release, and platform-acceptance states are reported separately.
-- [ ] Required delivery artifacts were retained.
 - [ ] Task-created temporary copies and worktrees were removed only after verification.
