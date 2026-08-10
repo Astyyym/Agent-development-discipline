@@ -1,7 +1,7 @@
 ---
 name: beginner-agent-development-rules
 description: Use when an AI agent starts, changes, migrates, packages, open-sources, or delivers a software project. Guides requirement confirmation, staged verification, maintainable design, safe delivery, and cleanup.
-version: 1.2.0
+version: 1.3.0
 author: Hermes Agent
 license: MIT
 platforms: [linux, macos, windows]
@@ -70,7 +70,21 @@ For long, multi-stage, or cross-session work, keep project context files with di
 
 Do not create duplicate sources of truth. Product scope belongs in the requirements document; implementation details belong in the short plan; project rules belong in `AGENTS.md`.
 
-## 4. Stages, Feedback Loops, and Vertical Slices
+## 4. Prototype-First Product Work
+
+For new screens, changed user flows, information architecture, interaction behavior, or visible product states, create and validate a runnable interactive prototype before production implementation. A static screenshot is not an interaction prototype.
+
+Do not manufacture a prototype for backend-only fixes, data migrations, CLI work, build configuration, or small changes with no user-facing behavior.
+
+For product-facing work, use this order:
+
+> intent and boundaries → interactive prototype → prototype acceptance → technical plan and acceptance criteria → staged implementation → real user-flow acceptance → update the prototype and plan
+
+Treat the accepted prototype as the product baseline. When implementation changes visible structure, flow, or state, update the prototype first and keep it synchronized with production behavior. A design artifact does not replace architecture: after prototype acceptance, explicitly define implementation scope, data and permission boundaries, risks, test seams, and non-goals.
+
+Agents may implement, test, reproduce, and repair. Humans retain responsibility for product trade-offs, material architecture decisions, acceptance criteria, and final delivery. Generated output is never sufficient evidence of completion.
+
+## 5. Stages, Feedback Loops, and Vertical Slices
 
 Split complex work into independently verifiable stages. Each stage defines its goal, entry condition, change scope, verification, pass criteria, temporary artifacts, and failure handling.
 
@@ -79,6 +93,18 @@ Use this order:
 > confirm entry → execute current stage → verify immediately → record evidence → continue only after passing
 
 A stage is **passed**, **failed**, **blocked**, or **deferred**. Do not enter the next stage, expand scope, or replace stage verification with a later overall test while the gate is not passed.
+
+For multi-step, optimization, investigation, or cross-file work, state a minimal task contract before execution:
+
+| Field | Required content |
+|---|---|
+| Goal | The real problem and the observable completed outcome |
+| Scope | Allowed modules, non-goals, and permission boundaries |
+| Acceptance | User flow, test command, benchmark, or observable result |
+| Stop condition | When to finish or report a blocker instead of iterating indefinitely |
+| Risk | Data, permissions, compatibility, rollback, and irreversible actions |
+
+For performance or solution exploration, establish a comparable baseline before changing implementation, then remeasure and compare. Do not claim an improvement from intuition or a single unpaired observation.
 
 Verification should provide a clear, repeatable, red-capable signal for the stage’s real goal. Prefer:
 
@@ -92,7 +118,7 @@ Low-level checks do not replace high-level acceptance: syntax passing does not p
 
 For complex features, use vertical slices: one smallest real behavior chain at a time, **verification → minimal implementation → re-verification**. Do not first build large layers of frontend/backend/database work or batches of tests that are not tied to observed behavior.
 
-## 5. Delivery Review: Two Separate Axes
+## 6. Delivery Review: Two Separate Axes
 
 Before delivery, review both axes separately.
 
@@ -111,7 +137,7 @@ Before delivery, review both axes separately.
 
 One axis passing does not replace the other. Do not automatically commit, push, package, or release merely because code appears complete; follow the requested delivery boundary.
 
-## 6. Design with Restraint
+## 7. Design with Restraint
 
 Prefer deep modules: a small, stable interface that hides meaningful implementation complexity from callers and tests.
 
@@ -124,7 +150,7 @@ Before extracting or abstracting, ask:
 
 Without a real variation point, do not add speculative plugin points, generic parameters, adapters, or middlemen. Record worthwhile architecture improvements as follow-up work instead of expanding the current stage.
 
-## 7. Verification and Security Gate
+## 8. Verification and Security Gate
 
 Verification must match the product and target platform. Where relevant, run syntax/type checks, dependency/resource checks, tests, a real user-flow smoke test, packaging/startup checks, output-content checks, and `git diff --check`.
 
