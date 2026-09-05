@@ -1,12 +1,12 @@
-# Beginner Agent Development Rules
+# Agent Development Discipline
 
-A reusable, framework-agnostic Hermes Agent skill for cautious software development and delivery.
+A reusable, framework-agnostic workflow for AI coding agents that need to develop and deliver software carefully.
 
 It helps an AI agent:
 
 - confirm material requirements before coding;
 - keep one authoritative source location;
-- work in small, independently verifiable stages;
+- make small changes in independently verifiable stages;
 - use real feedback loops and vertical slices;
 - review requirements fit separately from engineering quality;
 - avoid speculative abstractions and unnecessary process overhead;
@@ -19,7 +19,7 @@ It helps an AI agent:
 Copy `SKILL.md` into your Hermes skills directory, for example:
 
 ```text
-~/.hermes/skills/software-development/beginner-agent-development-rules/SKILL.md
+~/.hermes/skills/software-development/agent-development-discipline/SKILL.md
 ```
 
 The skill is intentionally generic. It contains no project-specific credentials, personal data, or machine-specific paths.

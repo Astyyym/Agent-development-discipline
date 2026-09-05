@@ -1,5 +1,5 @@
 ---
-name: beginner-agent-development-rules
+name: agent-development-discipline
 description: Use when an AI agent starts, changes, migrates, packages, open-sources, or delivers a software project. Guides requirement confirmation, staged verification, maintainable design, safe delivery, and cleanup.
 version: 1.3.0
 author: Hermes Agent
@@ -11,7 +11,7 @@ metadata:
     related_skills: [writing-plans, vibe-coding-spec]
 ---
 
-# Beginner Agent Development Rules
+# Agent Development Discipline
 
 ## Overview
 
