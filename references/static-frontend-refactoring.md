@@ -1,11 +1,11 @@
-# 静态前端重构最低交付
+# Static frontend refactoring minimum
 
-当重构纯 HTML/CSS/JS 小工具时，除非哥哥明确保留单文件形态：
+Use when refactoring a static HTML/CSS/JS tool.
 
-1. 将页面结构、样式、静态数据和交互逻辑拆到清晰边界，避免留下重复定义或过期注释。
-2. 若保留旧单文件作为回归基线，说明新的正式入口和保留原因；哥哥明确删除旧实现时，删除旧文件及文档引用并验证新入口。
-3. 纯静态 Windows 工具默认以 `index.html` 为入口，不添加只负责打开浏览器的 BAT；只有 BAT 承担服务器启动或环境检查等实际工作时才增加，并纳入验证。
-4. 数量、徽标和说明不要手写第二份真相；重构时统一矛盾口径。
-5. 使用 `contain` 时，裁剪、命中和导出坐标按实际图片显示矩形计算，横图和竖图都验证留白不会进入错误导出。
-6. 最低验证：脚本语法、资源加载，以及真实的上传 → 裁剪 → 生成 → 下载浏览器冒烟。
-7. 图纸、表格、地图等供人照着操作的视觉产物，编号/色号/标注是否出现在每个单元格属于需求；过小时提高最小单元尺寸并允许滚动或分页，预览和下载遵循同一规则。
+1. Keep structure, styles, data, and interaction logic at clear boundaries; remove duplicate definitions and stale comments.
+2. If an old entry remains as a regression baseline, identify the official entry and why the old file remains.
+3. Do not add a launcher script unless it performs real server startup or environment work that is in scope.
+4. Keep displayed counts, labels, and explanations derived from one source of truth.
+5. For cropping or coordinate work, calculate against the actual displayed rectangle and test both wide and tall inputs.
+6. Minimum validation is script syntax, resource loading, and the real affected browser flow.
+7. Visual artifacts must preserve required labels and annotations in both preview and exported output.

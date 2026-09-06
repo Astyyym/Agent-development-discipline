@@ -1,28 +1,33 @@
-# 项目文档职责
+# Project context documents
 
-## 文件分工
+Use the project's existing documentation convention. File names below are examples, not requirements.
 
-| 文件 | 管什么 |
+## Responsibilities
+
+| Document | Responsibility |
 |---|---|
-| `开发短计划/` 或 `docs/plans/` | 怎么改：目标、准确路径、步骤、验收 |
-| `AGENTS.md` | 项目长期规矩：怎么跑、能改什么、禁区、交付注意 |
-| `task_plan.md` | 长任务当前阶段、阻塞、验收勾选 |
-| `findings.md` | 环境结论、踩坑、无效尝试、待问事项 |
-| `progress.md` | 会话级最小进度：做了什么、验证、下一步 |
-| 需求文档 / PRD | 产品要做什么、范围和已确认决策 |
+| Requirements / PRD | Product scope, non-goals, acceptance, and confirmed decisions |
+| Project instructions (`AGENTS.md` or equivalent) | Long-term rules, commands, boundaries, and delivery constraints |
+| Short plan | How this change will be made: exact files, steps, and verification |
+| Task state | Current stage, blockers, acceptance status, and next gate |
+| Findings | Environment conclusions, pitfalls, and failed approaches |
+| Progress | Concise session history |
 
-## 创建与更新
+## Creation threshold
 
-- 新项目或首次正式开发：若没有 `AGENTS.md`，补齐项目事实、启动/测试方式、禁区和文档位置。
-- 已确认需求后：必须写或更新开发短计划。
-- 预估跨会话、多阶段或易中断：维护 `task_plan.md`、`findings.md`、`progress.md`。
-- 单文件小修可以省略三件套，但仍需确认范围并验证。
+- A one-line or low-risk change may use only the existing issue/diff and targeted verification.
+- Normal changes need recorded requirements, acceptance, and a short plan.
+- Cross-session, multi-stage, high-risk, or interruption-prone work may use task state, findings, and progress.
+- Do not create a document merely because this table names it.
 
-## 冲突时听谁的
+## Authority and synchronization
 
-- 产品要做什么：需求文档；
-- 怎么改、改哪些文件、怎么验：开发短计划；
-- 做到哪一阶段：`task_plan.md`；
-- 长期项目规矩：`AGENTS.md`。
+1. Product scope comes from requirements/PRD.
+2. Long-term project rules come from project instructions.
+3. Implementation steps and verification come from the short plan.
+4. Current stage status comes from task state.
+5. Findings and progress record evidence; they do not override normative decisions.
 
-项目术语、状态名称、角色和命名规则应沉淀到长期文档，不额外制造同功能的重复上下文文件。已有术语和测试边界确认过后直接沿用，不重复询问哥哥。
+Before changing a requirement, update the requirements source, then the short plan, then task state and derived notes. If sources conflict, stop implementation, identify the files and claims, apply the project's declared authority order, ask for a decision when the order is unclear, and synchronize derived records after resolution.
+
+Do not copy the same decision into several normative documents. Link to the authority instead. Mark historical notes as history and do not treat them as current instructions.

@@ -1,10 +1,13 @@
-# Windows EXE 与原生流程验收
+# Native desktop artifact acceptance
 
-功能依赖 Windows EXE、pywebview 或系统文件对话框时，不能用 Flask 测试或 PDF 生成冒充桌面验收。
+Use when the deliverable depends on a native desktop executable, embedded webview, system dialog, or another platform-specific artifact.
 
-1. 从当前待验收分支的干净 worktree 执行规定的 Windows 打包 BAT；构建产物、虚拟环境、临时库和日志放在 Git 忽略目录或系统临时目录。
-2. 启动 `dist` 中实际生成的 EXE，确认端口未被开发服务占用，并使用隔离数据根，绝不接触真实业务库。
-3. 验证受影响的 PDF/文件流程：桌面预览、pywebview bridge、原生保存/选取窗口、中文路径和文件名、取消操作、保存后 header，以及用本机阅读器打开后的页数和尺寸。
-4. 关闭并重启 EXE 后重做关键流程，确认没有退化到外部浏览器或二次登录。
-5. 浏览器模式单独验证，确保仍返回原有内容类型和下载行为。
-6. 报告区分自动化覆盖、EXE 中观察到原生窗口、人工完成选择/取消/阅读器比对。未完成项只能称部分通过。
+A server-side test, source build, or generated document does not replace acceptance of the actual artifact.
+
+1. Build from the intended clean source using the project's documented command.
+2. Start the actual artifact with isolated test data and no production data.
+3. Exercise the affected native and application flows, including error, cancel, restart, path, and output cases relevant to the requirement.
+4. Test browser or alternate modes separately when they are also supported.
+5. Report automation, observed native behavior, and pending manual checks separately.
+
+A packaged artifact is only accepted when the required real flow passes; otherwise report partial, failed, blocked, or unverified status.

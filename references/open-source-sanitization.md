@@ -1,25 +1,19 @@
-# 开源与公开仓库安全
+# Public repository sanitization
 
-## 发布前
+Use before open-sourcing or publishing a repository, package, or documentation set.
 
-扫描 API Key、Token、Cookie、密码、私钥、证书、`.env`、真实姓名、电话、地址、客户/健康/业务数据、本机绝对路径、Windows 用户名、日志、数据库备份、截图、README、Prompt 和配置中的隐私；检查 `node_modules`、缓存、虚拟环境和构建产物是否应加入 `.gitignore`。
+## Scan
 
-公开仓库使用虚构演示数据、相对路径或通用占位符。真实配置留在本地并忽略，仓库提供 `.env.example` 或示例配置。秘密进入 Git 历史后，删除当前文件不算修复，必须提醒哥哥吊销/轮换并处理历史、分支、标签和 Release 附件。
+Inspect tracked files, planned changes, relevant history, release assets, examples, screenshots, prompts, and configuration for secrets, credentials, personal/customer data, local paths, usernames, logs, databases, backups, caches, virtual environments, and generated artifacts.
 
-## 私有项目公开化
+Interpret test fixtures and public attribution in context; do not rely on keyword matching alone.
 
-当旧历史含有本机路径、用户名、私密配置或真实数据时，默认保留原私有仓库，不直接改 Public，也不未经确认重写历史。
+## Safe publication
 
-1. 确认原工作树和当前 HEAD；
-2. 从正式提交导出 tracked 文件，不复制 `.git`、缓存和本地文件；
-3. 在独立目录清理 README、配置、脚本、注释和元数据；
-4. 做秘密、路径、数据扩展名、语法和 `git diff --check` 检查；
-5. 新目录重新初始化为干净仓库，除非哥哥明确要求，不保留旧历史；
-6. 创建并推送新仓库后，用 `gh repo view` 和匿名 raw URL 验证可访问性及关键文件；
-7. 分开报告“新仓库已公开”和“旧仓库已清理/删除”。
+Use fictional data, portable paths, and generic placeholders. Keep real configuration local and ignored; provide an example configuration when useful. If a secret entered history, removing the current file is insufficient: rotate/revoke it and address affected history and published artifacts.
 
-产品目标平台决定公开文档范围。内部执行环境、Windows 用户名和本机路径不得自动进入 README、公开 Skill、Prompt 或示例。
+## Scope and verification
 
-## 公开化后的迁移
+The product's supported platform determines public documentation. The agent's execution environment and a maintainer's private paths do not automatically belong in public files.
 
-只有哥哥确认不再保留旧仓库时才删除。删除前确认新仓库可访问、提交已推送、工作树或恢复包可用。旧 remote 删除后，更新本地 `origin`，fetch，检查分支 ahead/behind 和 status，再确认旧仓库确实不存在、新仓库仍为 Public。
+Before reporting success, verify the published repository or artifact, visibility, expected files, and final remote state. Report repository push, package build, release publication, and platform acceptance separately.

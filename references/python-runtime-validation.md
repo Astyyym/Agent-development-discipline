@@ -1,50 +1,23 @@
-# Python 运行时依赖与导入验证
+# Python runtime and protocol validation
 
-## MCP Server 依赖
+Use when a project contains Python runtime dependencies or a protocol server.
 
-源码若使用 `from mcp.server.fastmcp import FastMCP, Context`，项目应声明：
+## Dependency and API checks
 
-```bash
-uv add "mcp>=1.3"
-uv sync
-```
+Declare runtime dependencies in the project, reproduce them in a clean environment, and inspect the installed API signature before relying on version-sensitive parameters. Do not infer compatibility from a global environment or old examples.
 
-不要只依赖当前机器的全局 Python 环境。检查结果应能在新 clone 的项目虚拟环境中复现。
+## Layered validation
 
-## FastMCP API 兼容性
+Separate evidence for:
 
-MCP SDK 版本升级后，先查询实际签名：
+1. source syntax/import and dependency resolution;
+2. protocol startup and request/response behavior;
+3. external runtime, integration, or target-platform behavior.
 
-```bash
-uv run python -c "import inspect; from mcp.server.fastmcp import FastMCP; print(inspect.signature(FastMCP))"
-```
+A successful import, registration, or process start does not prove the external integration works.
 
-部分版本不接受 `description=`，可使用当前签名支持的 `instructions=`。不要凭旧代码或记忆判断参数名。
+## Protocol smoke test
 
-## 最小验证链
+For a stdio JSON-RPC server, send real initialization and capability/list requests using the protocol version supported by the installed implementation. Check the response schema and deterministically record failures, timeouts, and missing external prerequisites. Do not label an external-runtime timeout as a protocol failure without evidence.
 
-```bash
-python3 -m compileall -q qgis_mcp_plugin src scripts
-PYTHONPATH=src uv run python -c \
-  "from qgis_mcp.qgis_mcp_server import mcp; print(type(mcp).__name__); print(len(mcp._tool_manager._tools))"
-git diff --check
-git status --short --branch
-```
-
-导入成功和工具注册成功只证明 Python/MCP 层可用；QGIS 插件加载、TCP 连接和真实 GIS 操作仍需在已安装 QGIS 的 Windows 环境单独验收。
-
-## MCP stdio 协议冒烟测试
-
-启动 Server 后，使用 stdio 发送真实 JSON-RPC 请求，至少验证：
-
-```json
-{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-03-26","capabilities":{},"clientInfo":{"name":"smoke-test","version":"1.0"}}}
-{"jsonrpc":"2.0","id":2,"method":"tools/list","params":{}}
-```
-
-应分别确认：
-
-- `initialize` 返回 `result.serverInfo` 和协议版本；
-- `tools/list` 返回工具描述、参数 schema 和工具列表；
-- 没有 QGIS 插件运行时，连接 `9876` 的超时只记录为外部运行时前置条件未满足；不能把它误报成 MCP 协议失败；
-- 最终报告明确区分“Python 导入层”“MCP 协议层”“QGIS TCP/真实工具层”。
+Final reporting must name the layer tested and the layer not tested.

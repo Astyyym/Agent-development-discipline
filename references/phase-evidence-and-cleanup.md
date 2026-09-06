@@ -1,78 +1,58 @@
-# 阶段证据与清理
+# Phase evidence and cleanup
 
-## 阶段执行
+## Phase execution
 
-复杂任务拆成可以独立完成和验收的阶段。每阶段明确：目标、进入条件、改动范围、验证方式、通过标准、临时副产物和失败处理。
+For normal and high-risk work, each phase defines its entry condition, goal, allowed scope, verification, pass criteria, temporary artifacts, and failure handling.
 
-固定顺序：
+Fixed order:
 
-> 进入条件确认 → 执行 → 立即验证 → 记录结果 → 通过后进入下一阶段
+> confirm entry → execute → verify immediately → record evidence → continue only after passing
 
-阶段状态：
+A phase is `passed`, `failed`, `blocked`, or `deferred`. Do not replace a failed gate with a later overall test.
 
-- **通过**：满足验收标准，可以继续；
-- **失败**：实现未达标，停留在当前阶段修复；
-- **阻塞**：需求、架构或环境需要哥哥判断；
-- **延期**：问题确认但不属于本次范围。
+## Evidence record
 
-阶段门未通过，不得进入下一阶段、扩大范围、用整体测试代替当前验证，或把“暂时没报错”当作功能完成。
+Use one record per phase. Markdown is sufficient; YAML or JSON may be used when automation consumes the record.
 
-## 验证质量
-
-验证应尽量建立对本阶段目标明确、可重复、可失败的反馈回路，优先级为：
-
-1. 真实用户行为或端到端流程；
-2. 已确认测试接缝上的行为测试；
-3. API/CLI 请求与确定性输出对比；
-4. 浏览器流程、DOM 状态、控制台和网络结果；
-5. 静态、类型和语法检查。
-
-低层检查不能替代高层验收。语法通过不等于页面功能完成，服务启动不等于业务正确，文件生成不等于 PDF 内容和版式正确。
-
-复杂功能优先采用垂直切片：每次贯穿一条最小真实行为链路，完成“验证 → 最小实现 → 复验”，再进入下一条链路。不要先按前后端、数据库、页面等技术层大面积铺开，也不要批量编写无法对应真实行为的测试。
-
-## 最小证据
-
-每阶段只保留足够证明结果的最小证据：
-
-```text
-阶段：
-目标：
-实际改动：
-验证方式：
-验证结果：
-结论：通过 / 失败 / 阻塞 / 延期
-临时副产物：
-后续事项：
+```yaml
+phase: "name"
+goal: "observable outcome"
+scope: ["allowed/path"]
+action: "command or user action"
+inputs: "relevant input or fixture"
+expected: "expected observable result"
+actual: "observed result"
+evidence_type: "e2e | behavior_test | api_cli | browser | platform | static | manual"
+status: "passed | failed | blocked | deferred"
+artifacts: ["path or URL, if any"]
+limitations: "what was not exercised"
+next_step: "follow-up or none"
 ```
 
-必须区分真实执行并通过、只做静态检查、理论可行但未验证、需要人工确认但未完成。
+`static`, `theoretical`, `not_run`, and `manual_pending` evidence must not be represented as a successful behavior or platform acceptance. Preserve the command, input, and actual output when they are needed to reproduce the claim.
 
-## 失败处理
+## Final delivery report
 
-1. 记录失败现象和复现方式；
-2. 判断是代码、需求、环境还是验证方法问题；
-3. 只在当前阶段范围内修复；
-4. 重新执行当前阶段完整验证；
-5. 通过后更新证据，再进入下一阶段。
+At minimum report:
 
-若失败暴露需求、架构、数据模型或交付范围变化，暂停并与哥哥确认，更新需求文档和开发短计划。
+- requested scope and non-goals;
+- changed files or artifacts;
+- requirements-fit result;
+- engineering-quality result;
+- phase statuses and evidence links;
+- tests and real user/platform flows run;
+- failed, blocked, deferred, and unverified items;
+- repository, package, release, and platform states separately;
+- cleanup and rollback status.
 
-## 副产物清理
+## Failure handling
 
-登记本次任务创建的临时目录、副本、worktree、测试数据库、模拟数据、日志、截图、构建缓存、服务、端口、浏览器配置、PDF、EXE 和 ZIP。
+1. Record the symptom and reproduction.
+2. Classify code, requirement, environment, or verification-method cause.
+3. Change only the current phase scope.
+4. Rerun the complete phase verification.
+5. Update evidence before proceeding.
 
-任务结束时：
+## Cleanup
 
-1. 确认有效改动已同步到唯一权威源码；
-2. 确认正式产物已生成并通过验证；
-3. 确认临时副本没有未同步内容；
-4. 关闭本次启动的服务和进程；
-5. 删除本次创建且不需保留的副产物；
-6. 保留哥哥原有的备份、目录、日志、worktree 和正式产物。
-
-清理后复核：临时目录不存在、进程关闭、端口释放、Git 状态符合预期、正式源码和产物仍可用、没有测试数据写入正式数据。
-
-## 不可逆操作
-
-删除目录、数据库、唯一副本，覆盖正式数据或交付包，删除分支/worktree/远程仓库，重写 Git 历史，批量迁移数据，以及修改系统级配置，必须单独确认。
+Register task-created temporary directories, worktrees, test data, logs, caches, services, ports, screenshots, and build artifacts. After synchronization and verification, close task-created services, remove only disposable artifacts, and confirm the authoritative source and formal outputs remain usable. Never remove a pre-existing backup, only source, history, or recovery artifact without authorization.

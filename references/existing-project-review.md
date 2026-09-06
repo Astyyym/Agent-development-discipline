@@ -1,52 +1,53 @@
-# 已有项目回顾审查表
+# Existing-project review checklist
 
-用于哥哥要求“重新审视、复盘、看看还要改什么”的已开发项目。此时默认只审查，不改代码。
+Use when reviewing an already-developed project. Review first; do not change code until the scope is confirmed.
 
-## 1. 需求与计划
+## 1. Requirements and plan
 
-- 是否有正式需求文档，而不只是聊天记录或执行 Prompt。
-- 当前实现是否仍符合已确认的架构与开发边界。
-- 新想法是否已进入需求确认，而非直接塞进代码。
-- GitHub open Issues、路线图和待办默认属于未来范围；用户要求审查当前基线时，不把它们混入“必须修改”。
-- 短计划是否包含目标、准确文件、步骤、验证和需求对应关系。
-- 已完成事项应记为完成记录，不要继续冒充下一阶段计划。
+- Is there a current requirements source rather than only chat history or an execution prompt?
+- Does the implementation match the confirmed architecture and boundaries?
+- Are new ideas still outside scope until confirmed?
+- Are the plan, exact files, verification, and acceptance clear?
+- Are completed items recorded as history rather than presented as future work?
 
-## 2. 环境与唯一源码
+## 2. Source and environment
 
-- 明确权威源码位置、构建副本和交付目录。
-- `/mnt/c`、`/mnt/d` 是 WSL 对 Windows 磁盘的访问路径，不代表存在第二份 WSL 副本。
-- 检查 `/home/...` 等位置是否另有独立克隆；确认无遗漏后才清理。
-- Windows 项目不得仅凭 WSL 测试声称完整 Windows 支持。
+- Is the authoritative source distinct from build copies and delivery directories?
+- Are independent clones, worktrees, and temporary copies accounted for?
+- Is platform support distinguished from tests run in the agent's environment?
 
-## 3. 开源安全
+## 3. Public-release safety
 
-检查当前树与 Git 已跟踪历史中的：
+Check the current tree and relevant Git history for:
 
-- 密钥、Token、Cookie、私钥和真实配置；
-- 姓名、联系方式、客户/健康/业务数据；
-- 本机绝对路径和用户名；
-- 日志、数据库、备份、截图和派生文件；
-- `.gitignore` 是否真实命中预期路径。
+- secrets, tokens, cookies, private keys, and real configuration;
+- personal, customer, health, financial, or business data;
+- local absolute paths and usernames;
+- logs, databases, backups, screenshots, and generated files;
+- `.gitignore` coverage for private runtime artifacts.
 
-命中示例数字或公开账号不应机械判定为泄密，要结合上下文区分真实数据、测试 fixture 和公开署名。
+Interpret example values in context; do not label public test fixtures as secrets mechanically.
 
-## 4. 验证证据分级
+## 4. Evidence levels
 
-依次区分：
+Report the highest level actually completed:
 
-1. 静态检查；
-2. 单元/集成自动化测试；
-3. 本环境运行冒烟；
-4. 目标平台实机验收；
-5. 打包产物或 Release 验收。
+1. static check;
+2. unit/integration automation;
+3. local runtime smoke test;
+4. target-platform acceptance;
+5. packaged artifact or release acceptance.
 
-报告必须说明做到哪一级。BAT 内容测试不等于真实双击成功；WSL Python 测试不等于 Windows Python 验收。
+A script-content test does not prove native execution. A test in one environment does not prove support on another.
 
-## 5. 审查输出格式
+## 5. Review output
 
-- **必须修改**：安全、需求偏差、无法交付、承诺过度。
-- **建议修改**：整洁性、体验、文档和维护性改进。
-- **当前无需修改**：已经符合边界的核心设计，避免无意义重写。
-- **需要哥哥确认**：会改变架构、使用方式或公开承诺的决策。
+Classify findings as:
 
-审查结束后停在需求确认点。只有哥哥确认范围后，才更新需求文档、编写新短计划并实施。
+- **must fix**: security, requirement deviation, inability to deliver, or overclaim;
+- **recommended**: maintainability, documentation, or usability improvement;
+- **no change now**: already within the agreed boundary;
+- **needs decision**: changes architecture, usage, platform support, or public commitment;
+- **not verified**: evidence is missing.
+
+End the review at the confirmation point. Implementation begins only after scope and decisions are confirmed.
