@@ -43,6 +43,19 @@ Before project work, read the matching files:
 Project-specific skills belong to this project and are not added to Hermes's global skill directory.
 ```
 
+## Project memory
+
+Some projects keep a project-scoped long-term memory at the project root: `memory/README.md` as the index, plus a small set of topic files.
+
+- Entry: read `memory/README.md` first, then the files its index points to.
+- Content: project facts, pitfalls, and confirmed conventions — what an agent needs on every visit. Not product specs (requirements/PRD), not reusable procedures (project skill `references/`), not one-off execution history (short plan, task state).
+- Categories: keep a stable skeleton — project context and business scenarios; local environment and stack boundaries; pitfalls. File names may vary per project.
+- Writes go to `memory/`, not to the agent's global memory; global memory does not repeat project detail.
+- It is not auto-loaded, so rules that must hold every turn stay in the project instructions.
+- When creating it, register the entry point in `AGENTS.md` and in the document-ownership table.
+- It is committed with the repository, so the same sensitive-data rules apply.
+- Cite evidence (source `path:line`, tests, references, plans) so a reader can re-check whether a conclusion still holds.
+
 ## Authority and synchronization
 
 1. Product scope comes from requirements/PRD.

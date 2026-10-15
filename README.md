@@ -18,6 +18,9 @@ The workflow helps an AI agent to:
 - verify the authoritative copy before cleaning temporary worktrees;
 - scan for secrets, personal information, local paths, and real data before publication;
 - distinguish repository pushes, releases, packages, and platform acceptance tests;
+- keep private working records out of public repositories, judged by category rather than volume;
+- distinguish stopping future publication from retracting already-published history;
+- keep long-lived project facts in a project-scoped memory directory instead of global memory;
 - report completed, failed, deferred, and blocked work honestly.
 
 ## How to Use It

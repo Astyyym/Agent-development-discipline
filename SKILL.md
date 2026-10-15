@@ -1,7 +1,7 @@
 ---
 name: agent-development-discipline
 description: Use when an AI agent starts, changes, migrates, packages, open-sources, or delivers a software project. Guides scoped planning, staged verification, safe delivery, and honest reporting without embedding user or project context.
-version: 1.5.0
+version: 1.6.0
 author: Hermes Agent
 license: MIT
 platforms: [linux, macos, windows]
@@ -50,6 +50,8 @@ Requirement changes follow: **understand → confirm → update requirements →
 
 Use the project's existing context convention. A common division is: requirements/PRD for product decisions; `AGENTS.md` for long-term rules; a short plan for implementation; task state for current stage; findings for environment conclusions; progress for session history. These names are examples, not mandatory files.
 
+Some projects keep a project-scoped long-term memory under `memory/` at the project root. When it exists, read `memory/README.md` first, then the files its index points to. Project facts, pitfalls, and confirmed conventions belong there rather than in the agent's global memory, and global memory does not repeat project detail. A `memory/` directory is not auto-loaded, so rules that must hold every turn stay in the project instructions. See `references/project-documents.md`.
+
 Do not duplicate the same decision across files. If sources conflict, stop, report the files and claims, apply the project's declared authority order, and synchronize derived records after resolution. See `references/project-documents.md`.
 
 ## Project-specific skills and AGENTS.md routing
@@ -88,6 +90,8 @@ Prefer real user behavior/end-to-end tests, then public-seam behavior tests, det
 
 Do not call a push a release or a static check a platform acceptance test.
 
+A public repository carries the product and what collaborators need, not the private working record. Decide what to publish by category rather than by volume, and remember that stopping future commits does not retract what history already exposes. See `references/open-source-sanitization.md`.
+
 ## Design restraint
 
 Prefer small stable interfaces and abstractions backed by a current variation point or confirmed reuse. Put speculative improvements in follow-up work.
@@ -100,6 +104,8 @@ Prefer small stable interfaces and abstractions backed by a current variation po
 4. Letting context files become competing sources of truth.
 5. Accepting worker success claims without integration verification.
 6. Deleting the only source, history, backup, or recovery artifact without authorization.
+7. Publishing private working records (per-task plans, stage/status logs, retrospectives, backlog lists) in a public repository.
+8. Treating deletion of a file as retraction of already-published history.
 
 ## Verification checklist
 
@@ -113,5 +119,7 @@ Prefer small stable interfaces and abstractions backed by a current variation po
 - [ ] Requirements fit and engineering quality were reviewed separately.
 - [ ] Real behavior/platform validation was completed when required.
 - [ ] Security/sensitive-data scan was completed before public delivery.
+- [ ] Public-repository content is split by category: product/collaborator material published, private working records excluded.
+- [ ] Project-scoped `memory/`, when present, was read and is routed by the project instructions.
 - [ ] Repository, package, release, and platform states are reported separately.
 - [ ] Temporary artifacts were cleaned only after synchronization and verification.
