@@ -21,6 +21,7 @@ The workflow helps an AI agent to:
 - keep private working records out of public repositories, judged by category rather than volume;
 - distinguish stopping future publication from retracting already-published history;
 - keep long-lived project facts in a project-scoped memory directory instead of global memory;
+- synchronize UI screenshots and README captions using isolated demo data and platform-specific evidence;
 - report completed, failed, deferred, and blocked work honestly.
 
 ## How to Use It
@@ -51,7 +52,8 @@ Generated code, a passing syntax check, a successful process start, or a complet
 ## Repository Contents
 
 - [`SKILL.md`](SKILL.md): the primary development and delivery workflow;
-- [`references/`](references/): supporting procedures for project review, planning, staged execution, runtime validation, platform delivery, and public release hygiene.
+- [`references/`](references/): supporting procedures for project review, planning, staged execution, runtime validation, platform delivery, and public release hygiene;
+- [`references/readme-and-screenshot-delivery.md`](references/readme-and-screenshot-delivery.md): capture scope, platform provenance, isolated demo data, individual visual review, and README synchronization.
 
 ## License
 

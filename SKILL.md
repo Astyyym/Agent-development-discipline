@@ -1,7 +1,7 @@
 ---
 name: agent-development-discipline
 description: Use when an AI agent starts, changes, migrates, packages, open-sources, or delivers a software project. Guides scoped planning, staged verification, safe delivery, and honest reporting without embedding user or project context.
-version: 1.6.0
+version: 1.6.1
 author: Hermes Agent
 license: MIT
 platforms: [linux, macos, windows]
@@ -92,6 +92,10 @@ Do not call a push a release or a static check a platform acceptance test.
 
 A public repository carries the product and what collaborators need, not the private working record. Decide what to publish by category rather than by volume, and remember that stopping future commits does not retract what history already exposes. See `references/open-source-sanitization.md`.
 
+### Screenshots and README synchronization
+
+For visible UI changes, interface showcases, or public delivery, read [Screenshots and README Synchronization](references/readme-and-screenshot-delivery.md). Plan affected platforms, pages, states, and images. After real-path acceptance, prefer existing project capture scripts, use isolated demo data, inspect every affected image, and update README captions against the current implementation. Before commit/publication, check references, provenance, and coverage. Report capture generation, visual review, and functional acceptance separately; uncovered platforms remain `unverified`. Keep commands, ports, data roots, and page inventories in project instructions or project skills.
+
 ## Design restraint
 
 Prefer small stable interfaces and abstractions backed by a current variation point or confirmed reuse. Put speculative improvements in follow-up work.
@@ -106,6 +110,7 @@ Prefer small stable interfaces and abstractions backed by a current variation po
 6. Deleting the only source, history, backup, or recovery artifact without authorization.
 7. Publishing private working records (per-task plans, stage/status logs, retrospectives, backlog lists) in a public repository.
 8. Treating deletion of a file as retraction of already-published history.
+9. Publishing stale UI images, treating mobile-web captures as native-app evidence, or treating capture generation as visual acceptance.
 
 ## Verification checklist
 
@@ -118,6 +123,7 @@ Prefer small stable interfaces and abstractions backed by a current variation po
 - [ ] Parallel work was integrated and re-verified when applicable.
 - [ ] Requirements fit and engineering quality were reviewed separately.
 - [ ] Real behavior/platform validation was completed when required.
+- [ ] Affected UI images use isolated demo data, were individually viewed, and match README references/captions; uncovered platforms or states remain explicit.
 - [ ] Security/sensitive-data scan was completed before public delivery.
 - [ ] Public-repository content is split by category: product/collaborator material published, private working records excluded.
 - [ ] Project-scoped `memory/`, when present, was read and is routed by the project instructions.
